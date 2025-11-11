@@ -4,7 +4,6 @@ Custom prompts turn your repeatable instructions into reusable slash commands, s
 
 ### Where prompts live
 
-
 - Location: store prompts in `$ADOM_HOME/prompts/` (defaults to `~/.adom/prompts/`). Set `ADOM_HOME` if you want to use a different folder.
 - File type: Adom only loads `.md` files. Non-Markdown files are ignored. Both regular files and symlinks to Markdown files are supported.
 - Naming: The filename (without `.md`) becomes the prompt name. A file called `review.md` registers the prompt `review`.
