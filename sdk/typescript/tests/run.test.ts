@@ -2,10 +2,10 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 
-import { codexExecSpy } from "./codexExecSpy";
+import { adomExecSpy } from "./adomExecSpy";
 import { describe, expect, it } from "@jest/globals";
 
-import { Codex } from "../src/codex";
+import { Adom } from "../src/adom";
 
 import {
   assistantMessage,
@@ -16,9 +16,9 @@ import {
   startResponsesTestProxy,
 } from "./responsesProxy";
 
-const codexExecPath = path.join(process.cwd(), "..", "..", "codex-rs", "target", "debug", "codex");
+const adomExecPath = path.join(process.cwd(), "..", "..", "adom-rs", "target", "debug", "adom");
 
-describe("Codex", () => {
+describe("Adom", () => {
   it("returns thread events", async () => {
     const { url, close } = await startResponsesTestProxy({
       statusCode: 200,
@@ -26,7 +26,7 @@ describe("Codex", () => {
     });
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       const result = await thread.run("Hello, world!");
@@ -68,7 +68,7 @@ describe("Codex", () => {
     });
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       await thread.run("first input");
@@ -111,7 +111,7 @@ describe("Codex", () => {
     });
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       await thread.run("first input");
@@ -155,7 +155,7 @@ describe("Codex", () => {
     });
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const originalThread = client.startThread();
       await originalThread.run("first input");
@@ -196,10 +196,10 @@ describe("Codex", () => {
       ],
     });
 
-    const { args: spawnArgs, restore } = codexExecSpy();
+    const { args: spawnArgs, restore } = adomExecSpy();
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread({
         model: "gpt-test-1",
@@ -235,10 +235,10 @@ describe("Codex", () => {
       ],
     });
 
-    const { args: spawnArgs, restore } = codexExecSpy();
+    const { args: spawnArgs, restore } = adomExecSpy();
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread({
         modelReasoningEffort: "high",
@@ -266,7 +266,7 @@ describe("Codex", () => {
       ],
     });
 
-    const { args: spawnArgs, restore } = codexExecSpy();
+    const { args: spawnArgs, restore } = adomExecSpy();
 
     const schema = {
       type: "object",
@@ -278,7 +278,7 @@ describe("Codex", () => {
     } as const;
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       await thread.run("structured", { outputSchema: schema });
@@ -289,7 +289,7 @@ describe("Codex", () => {
       const text = payload!.json.text;
       expect(text).toBeDefined();
       expect(text?.format).toEqual({
-        name: "codex_output_schema",
+        name: "adom_output_schema",
         type: "json_schema",
         strict: true,
         schema,
@@ -323,7 +323,7 @@ describe("Codex", () => {
     });
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       await thread.run([
@@ -351,8 +351,8 @@ describe("Codex", () => {
       ],
     });
 
-    const { args: spawnArgs, restore } = codexExecSpy();
-    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "codex-images-"));
+    const { args: spawnArgs, restore } = adomExecSpy();
+    const tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "adom-images-"));
     const imagesDirectoryEntries: [string, string] = [
       path.join(tempDir, "first.png"),
       path.join(tempDir, "second.jpg"),
@@ -362,7 +362,7 @@ describe("Codex", () => {
     });
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       await thread.run([
@@ -398,12 +398,12 @@ describe("Codex", () => {
       ],
     });
 
-    const { args: spawnArgs, restore } = codexExecSpy();
+    const { args: spawnArgs, restore } = adomExecSpy();
 
     try {
-      const workingDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "codex-working-dir-"));
-      const client = new Codex({
-        codexPathOverride: codexExecPath,
+      const workingDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "adom-working-dir-"));
+      const client = new Adom({
+        adomPathOverride: adomExecPath,
         baseUrl: url,
         apiKey: "test",
       });
@@ -435,9 +435,9 @@ describe("Codex", () => {
     });
 
     try {
-      const workingDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "codex-working-dir-"));
-      const client = new Codex({
-        codexPathOverride: codexExecPath,
+      const workingDirectory = fs.mkdtempSync(path.join(os.tmpdir(), "adom-working-dir-"));
+      const client = new Adom({
+        adomPathOverride: adomExecPath,
         baseUrl: url,
         apiKey: "test",
       });
@@ -453,14 +453,14 @@ describe("Codex", () => {
     }
   });
 
-  it("sets the codex sdk originator header", async () => {
+  it("sets the adom sdk originator header", async () => {
     const { url, close, requests } = await startResponsesTestProxy({
       statusCode: 200,
       responseBodies: [sse(responseStarted(), assistantMessage("Hi!"), responseCompleted())],
     });
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       await thread.run("Hello, originator!");
@@ -468,9 +468,9 @@ describe("Codex", () => {
       expect(requests.length).toBeGreaterThan(0);
       const originatorHeader = requests[0]!.headers["originator"];
       if (Array.isArray(originatorHeader)) {
-        expect(originatorHeader).toContain("codex_sdk_ts");
+        expect(originatorHeader).toContain("adom_sdk_ts");
       } else {
-        expect(originatorHeader).toBe("codex_sdk_ts");
+        expect(originatorHeader).toBe("adom_sdk_ts");
       }
     } finally {
       await close();
@@ -486,7 +486,7 @@ describe("Codex", () => {
     });
 
     try {
-      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
       const thread = client.startThread();
       await expect(thread.run("fail")).rejects.toThrow("stream disconnected before completion:");
     } finally {

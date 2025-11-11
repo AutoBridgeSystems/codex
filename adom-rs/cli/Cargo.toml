@@ -1,0 +1,59 @@
+[package]
+edition = "2024"
+name = "adom-cli"
+version = { workspace = true }
+
+[[bin]]
+name = "adom"
+path = "src/main.rs"
+
+[lib]
+name = "adom_cli"
+path = "src/lib.rs"
+
+[lints]
+workspace = true
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
+clap_complete = { workspace = true }
+adom-app-server = { workspace = true }
+adom-app-server-protocol = { workspace = true }
+adom-arg0 = { workspace = true }
+adom-chatgpt = { workspace = true }
+adom-cloud-tasks = { path = "../cloud-tasks" }
+adom-common = { workspace = true, features = ["cli"] }
+adom-core = { workspace = true }
+adom-exec = { workspace = true }
+adom-login = { workspace = true }
+adom-mcp-server = { workspace = true }
+adom-process-hardening = { workspace = true }
+adom-protocol = { workspace = true }
+adom-protocol-ts = { workspace = true }
+adom-responses-api-proxy = { workspace = true }
+adom-rmcp-client = { workspace = true }
+adom-stdio-to-uds = { workspace = true }
+adom-tui = { workspace = true }
+ctor = { workspace = true }
+owo-colors = { workspace = true }
+serde_json = { workspace = true }
+supports-color = { workspace = true }
+toml = { workspace = true }
+tokio = { workspace = true, features = [
+    "io-std",
+    "macros",
+    "process",
+    "rt-multi-thread",
+    "signal",
+] }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+adom_windows_sandbox = { package = "adom-windows-sandbox", path = "../windows-sandbox-rs" }
+
+[dev-dependencies]
+assert_cmd = { workspace = true }
+assert_matches = { workspace = true }
+predicates = { workspace = true }
+pretty_assertions = { workspace = true }
+tempfile = { workspace = true }

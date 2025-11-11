@@ -1,0 +1,21 @@
+[package]
+edition = "2024"
+name = "adom-protocol-ts"
+version = { workspace = true }
+
+[lints]
+workspace = true
+
+[lib]
+name = "adom_protocol_ts"
+path = "src/lib.rs"
+
+[[bin]]
+name = "adom-protocol-ts"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = { workspace = true }
+clap = { workspace = true, features = ["derive"] }
+adom-app-server-protocol = { workspace = true }
+ts-rs = { workspace = true }

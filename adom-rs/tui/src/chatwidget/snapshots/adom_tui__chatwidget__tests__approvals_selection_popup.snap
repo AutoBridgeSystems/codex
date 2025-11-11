@@ -1,0 +1,17 @@
+---
+source: tui/src/chatwidget/tests.rs
+expression: popup
+---
+  Select Approval Mode
+
+› 1. Read Only (current)  Adom can read files and answer questions. Adom
+                          requires approval to make edits, run commands, or
+                          access network.
+  2. Auto                 Adom can read files, make edits, and run commands
+                          in the workspace. Adom requires approval to work
+                          outside the workspace or access network.
+  3. Full Access          Adom can read files, make edits, and run commands
+                          with network access, without approval. Exercise
+                          caution.
+
+  Press enter to confirm or esc to go back

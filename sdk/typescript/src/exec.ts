@@ -5,7 +5,7 @@ import { fileURLToPath } from "node:url";
 
 import { SandboxMode, ModelReasoningEffort } from "./threadOptions";
 
-export type CodexExecArgs = {
+export type AdomExecArgs = {
   input: string;
 
   baseUrl?: string;
@@ -26,16 +26,16 @@ export type CodexExecArgs = {
   modelReasoningEffort?: ModelReasoningEffort;
 };
 
-const INTERNAL_ORIGINATOR_ENV = "CODEX_INTERNAL_ORIGINATOR_OVERRIDE";
-const TYPESCRIPT_SDK_ORIGINATOR = "codex_sdk_ts";
+const INTERNAL_ORIGINATOR_ENV = "ADOM_INTERNAL_ORIGINATOR_OVERRIDE";
+const TYPESCRIPT_SDK_ORIGINATOR = "adom_sdk_ts";
 
-export class CodexExec {
+export class AdomExec {
   private executablePath: string;
   constructor(executablePath: string | null = null) {
-    this.executablePath = executablePath || findCodexPath();
+    this.executablePath = executablePath || findAdomPath();
   }
 
-  async *run(args: CodexExecArgs): AsyncGenerator<string> {
+  async *run(args: AdomExecArgs): AsyncGenerator<string> {
     const commandArgs: string[] = ["exec", "--experimental-json"];
 
     if (args.model) {
@@ -82,7 +82,7 @@ export class CodexExec {
       env.OPENAI_BASE_URL = args.baseUrl;
     }
     if (args.apiKey) {
-      env.CODEX_API_KEY = args.apiKey;
+      env.ADOM_API_KEY = args.apiKey;
     }
 
     const child = spawn(this.executablePath, commandArgs, {
@@ -129,7 +129,7 @@ export class CodexExec {
           } else {
             const stderrBuffer = Buffer.concat(stderrChunks);
             reject(
-              new Error(`Codex Exec exited with code ${code}: ${stderrBuffer.toString("utf8")}`),
+              new Error(`Adom Exec exited with code ${code}: ${stderrBuffer.toString("utf8")}`),
             );
           }
         });
@@ -152,7 +152,7 @@ export class CodexExec {
 const scriptFileName = fileURLToPath(import.meta.url);
 const scriptDirName = path.dirname(scriptFileName);
 
-function findCodexPath() {
+function findAdomPath() {
   const { platform, arch } = process;
 
   let targetTriple = null;
@@ -204,8 +204,8 @@ function findCodexPath() {
 
   const vendorRoot = path.join(scriptDirName, "..", "vendor");
   const archRoot = path.join(vendorRoot, targetTriple);
-  const codexBinaryName = process.platform === "win32" ? "codex.exe" : "codex";
-  const binaryPath = path.join(archRoot, "codex", codexBinaryName);
+  const adomBinaryName = process.platform === "win32" ? "adom.exe" : "adom";
+  const binaryPath = path.join(archRoot, "adom", adomBinaryName);
 
   return binaryPath;
 }
