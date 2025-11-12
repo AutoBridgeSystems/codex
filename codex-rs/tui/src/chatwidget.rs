@@ -1236,6 +1236,10 @@ impl ChatWidget {
                 const INIT_PROMPT: &str = include_str!("../prompt_for_init_command.md");
                 self.submit_user_message(INIT_PROMPT.to_string().into());
             }
+            SlashCommand::Spec => {
+                const SPEC_PROMPT: &str = include_str!("../prompt_for_spec_command.md");
+                self.submit_user_message(SPEC_PROMPT.to_string().into());
+            }
             SlashCommand::Index => {
                 let index_target = self
                     .config

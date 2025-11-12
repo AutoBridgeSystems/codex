@@ -612,6 +612,11 @@ pub(crate) fn new_session_info(
             ]),
             Line::from(vec![
                 "  ".into(),
+                "/spec".into(),
+                " - run a spec interview to gather project requirements".dim(),
+            ]),
+            Line::from(vec![
+                "  ".into(),
                 "/status".into(),
                 " - show current session configuration".dim(),
             ]),

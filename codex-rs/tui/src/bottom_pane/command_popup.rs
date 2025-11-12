@@ -251,6 +251,19 @@ mod tests {
     }
 
     #[test]
+    fn filter_includes_spec_when_typing_prefix() {
+        let mut popup = CommandPopup::new(Vec::new());
+        popup.on_composer_text_change("/sp".to_string());
+
+        let matches = popup.filtered_items();
+        let has_spec = matches.iter().any(|item| match item {
+            CommandItem::Builtin(cmd) => cmd.command() == "spec",
+            CommandItem::UserPrompt(_) => false,
+        });
+        assert!(has_spec, "expected '/spec' to appear among filtered commands");
+    }
+
+    #[test]
     fn selecting_init_by_exact_match() {
         let mut popup = CommandPopup::new(Vec::new());
         popup.on_composer_text_change("/init".to_string());
@@ -261,6 +274,21 @@ mod tests {
         match selected {
             Some(CommandItem::Builtin(cmd)) => assert_eq!(cmd.command(), "init"),
             Some(CommandItem::UserPrompt(_)) => panic!("unexpected prompt selected for '/init'"),
+            None => panic!("expected a selected command for exact match"),
+        }
+    }
+
+    #[test]
+    fn selecting_spec_by_exact_match() {
+        let mut popup = CommandPopup::new(Vec::new());
+        popup.on_composer_text_change("/spec".to_string());
+
+        let selected = popup.selected_item();
+        match selected {
+            Some(CommandItem::Builtin(cmd)) => assert_eq!(cmd.command(), "spec"),
+            Some(CommandItem::UserPrompt(_)) => {
+                panic!("unexpected prompt selected for '/spec'")
+            }
             None => panic!("expected a selected command for exact match"),
         }
     }

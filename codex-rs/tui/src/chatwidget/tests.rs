@@ -995,6 +995,46 @@ fn slash_index_submits_prompt() {
 }
 
 #[test]
+fn slash_spec_submits_prompt() {
+    let (mut chat, mut rx, mut op_rx) = make_chatwidget_manual();
+
+    chat.dispatch_command(SlashCommand::Spec);
+
+    let prompt = include_str!("../../prompt_for_spec_command.md");
+    let items = match op_rx.try_recv() {
+        Ok(Op::UserInput { items }) => items,
+        other => panic!("expected UserInput op, got {other:?}"),
+    };
+    assert_eq!(items.len(), 1, "expected a single user input item");
+    match &items[0] {
+        UserInput::Text { text } => assert_eq!(text, prompt),
+        other => panic!("expected text user input, got {other:?}"),
+    }
+
+    match op_rx.try_recv() {
+        Ok(Op::AddToHistory { text }) => assert_eq!(text, prompt),
+        other => panic!("expected AddToHistory op, got {other:?}"),
+    }
+
+    match op_rx.try_recv() {
+        Err(TryRecvError::Empty) => {}
+        other => panic!("unexpected extra op: {other:?}"),
+    }
+
+    let cells = drain_insert_history(&mut rx);
+    assert!(
+        !cells.is_empty(),
+        "expected prompt to be added to conversation history"
+    );
+    let rendered = lines_to_single_string(&cells[0]);
+    let trimmed_prompt = prompt.trim();
+    assert!(
+        rendered.contains(trimmed_prompt),
+        "history should contain the prompt contents: {rendered:?}"
+    );
+}
+
+#[test]
 fn slash_init_skips_when_project_doc_exists() {
     let (mut chat, mut rx, mut op_rx) = make_chatwidget_manual();
     let tempdir = tempdir().unwrap();

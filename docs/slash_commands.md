@@ -17,6 +17,7 @@ Control Codex’s behavior during an interactive session with slash commands.
 | `/review`    | review my current changes and find issues                   |
 | `/new`       | start a new chat during a conversation                      |
 | `/init`      | create an AGENTS.md file with instructions for Codex        |
+| `/spec`      | run a spec interview to collect project requirements        |
 | `/index`     | build docs/INDEX.md and docs/index/* using the filesystem index tool |
 | `/compact`   | summarize conversation to prevent hitting the context limit |
 | `/undo`      | ask Codex to undo a turn                                    |

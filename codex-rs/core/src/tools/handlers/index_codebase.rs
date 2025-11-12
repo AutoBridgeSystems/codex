@@ -245,9 +245,16 @@ fn index_codebase_blocking(
     } else {
         listing.lines().count()
     };
-    let preview_lines: Vec<&str> = listing.lines().take(PREVIEW_LINE_LIMIT).collect();
-    let mut preview = preview_lines.join("\n");
-    if total_lines > preview_lines.len() {
+    let mut preview = String::new();
+    let mut preview_line_count = 0;
+    for line in listing.lines().take(PREVIEW_LINE_LIMIT) {
+        if preview_line_count > 0 {
+            preview.push('\n');
+        }
+        preview.push_str(line);
+        preview_line_count += 1;
+    }
+    if total_lines > preview_line_count {
         if !preview.is_empty() {
             preview.push('\n');
         }
@@ -269,7 +276,7 @@ fn index_codebase_blocking(
     Ok(IndexResult {
         listing,
         preview,
-        preview_lines: preview_lines.len(),
+        preview_lines: preview_line_count,
         total_lines,
         directories: stats.directories,
         files: stats.files,
@@ -281,12 +288,12 @@ fn build_gitignore(root: &Path, extra: &[String]) -> Result<Gitignore, FunctionC
     let mut builder = GitignoreBuilder::new(root);
     let gitignore_path = root.join(".gitignore");
     if gitignore_path.exists() {
-        builder.add(&gitignore_path).map_err(|err| {
-            FunctionCallError::Fatal(format!(
+        if let Some(err) = builder.add(&gitignore_path) {
+            return Err(FunctionCallError::Fatal(format!(
                 "failed to parse .gitignore at {}: {err}",
                 gitignore_path.display()
-            ))
-        })?;
+            )));
+        }
     }
 
     for pattern in expanded_patterns(DEFAULT_EXCLUDES.iter().copied()) {

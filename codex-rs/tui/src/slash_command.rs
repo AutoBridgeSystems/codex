@@ -17,6 +17,7 @@ pub enum SlashCommand {
     Review,
     New,
     Init,
+    Spec,
     Index,
     Compact,
     Undo,
@@ -39,6 +40,7 @@ impl SlashCommand {
             SlashCommand::Feedback => "send logs to maintainers",
             SlashCommand::New => "start a new chat during a conversation",
             SlashCommand::Init => "create an AGENTS.md file with instructions for Codex",
+            SlashCommand::Spec => "kick off a spec interview to draft requirements",
             SlashCommand::Index => "generate docs/INDEX.md and docs/index/* using the index tool",
             SlashCommand::Compact => "summarize conversation to prevent hitting the context limit",
             SlashCommand::Review => "review my current changes and find issues",
@@ -67,6 +69,7 @@ impl SlashCommand {
         match self {
             SlashCommand::New
             | SlashCommand::Init
+            | SlashCommand::Spec
             | SlashCommand::Index
             | SlashCommand::Compact
             | SlashCommand::Undo
