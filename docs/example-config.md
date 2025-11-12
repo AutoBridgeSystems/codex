@@ -173,8 +173,8 @@ chatgpt_base_url = "https://chatgpt.com/backend-api/"
 # Restrict ChatGPT login to a specific workspace id. Default: unset.
 # forced_chatgpt_workspace_id = ""
 
-# Force login mechanism when Codex would normally auto-select. Default: unset.
-# Allowed values: chatgpt | api
+# Force login mechanism when Codex would normally use the default API-key prompt.
+# Allowed values: chatgpt | api (default is api; uncomment to require ChatGPT)
 # forced_login_method = "chatgpt"
 
 ################################################################################

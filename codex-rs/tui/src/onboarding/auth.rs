@@ -177,11 +177,11 @@ impl AuthModeWidget {
         let mut lines: Vec<Line> = vec![
             Line::from(vec![
                 "  ".into(),
-                "Sign in with ChatGPT to use Codex as part of your paid plan".into(),
+                "Paste an OpenAI API key to start coding immediately.".into(),
             ]),
             Line::from(vec![
                 "  ".into(),
-                "or connect an API key for usage-based billing".into(),
+                "Need your ChatGPT plan instead? Sign in with ChatGPT below.".into(),
             ]),
             "".into(),
         ];
@@ -215,29 +215,36 @@ impl AuthModeWidget {
             vec![line1, line2]
         };
 
-        let chatgpt_description = if self.is_chatgpt_login_allowed() {
-            "Usage included with Plus, Pro, and Team plans"
-        } else {
-            "ChatGPT login is disabled"
-        };
-        lines.extend(create_mode_item(
-            0,
-            AuthMode::ChatGPT,
-            "Sign in with ChatGPT",
-            chatgpt_description,
-        ));
-        lines.push("".into());
+        let mut option_idx = 0usize;
         if self.is_api_login_allowed() {
             lines.extend(create_mode_item(
-                1,
+                option_idx,
                 AuthMode::ApiKey,
                 "Provide your own API key",
-                "Pay for what you use",
+                "Usage-based billing (default)",
             ));
+            option_idx += 1;
             lines.push("".into());
         } else {
             lines.push(
                 "  API key login is disabled by this workspace. Sign in with ChatGPT to continue."
+                    .dim()
+                    .into(),
+            );
+            lines.push("".into());
+        }
+
+        if self.is_chatgpt_login_allowed() {
+            lines.extend(create_mode_item(
+                option_idx,
+                AuthMode::ChatGPT,
+                "Sign in with ChatGPT",
+                "Use your Plus, Pro, Team, Edu, or Enterprise plan",
+            ));
+            lines.push("".into());
+        } else {
+            lines.push(
+                "  ChatGPT login is disabled by this workspace. Use an API key to continue."
                     .dim()
                     .into(),
             );

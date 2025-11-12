@@ -871,19 +871,18 @@ notifications = [ "agent-turn-complete", "approval-requested" ]
 
 ### Forcing a login method
 
-To force users on a given machine to use a specific login method or workspace, use a combination of [managed configurations](https://developers.openai.com/codex/security#managed-configuration) as well as either or both of the following fields:
+Codex now defaults to API-key authentication. To opt into the ChatGPT flow (or to pin a specific workspace), use [managed configurations](https://developers.openai.com/codex/security#managed-configuration) together with the fields below:
 
 ```toml
-# Force the user to log in with ChatGPT or via an api key.
-forced_login_method = "chatgpt" or "api"
+# Force the user to sign in with ChatGPT instead of the default API-key prompt.
+# Use `forced_login_method = "api"` to re-enable API-only mode if a profile overrides it.
+forced_login_method = "chatgpt"
 # When logging in with ChatGPT, only the specified workspace ID will be presented during the login
 # flow and the id will be validated during the oauth callback as well as every time Codex starts.
 forced_chatgpt_workspace_id = "00000000-0000-0000-0000-000000000000"
 ```
 
-If the active credentials don't match the config, the user will be logged out and Codex will exit.
-
-If `forced_chatgpt_workspace_id` is set but `forced_login_method` is not set, API key login will still work.
+If the active credentials don't match the config, the user will be logged out and Codex will exit. Leaving both keys unset keeps the default API-key flow.
 
 ### Control where login credentials are stored
 
@@ -958,6 +957,6 @@ Valid values:
 | `projects.<path>.trust_level`                    | string                                                            | Mark project/worktree as trusted (only `"trusted"` is recognized).                                                         |
 | `tools.web_search`                               | boolean                                                           | Enable web search tool (alias: `web_search_request`) (default: false).                                                     |
 | `tools.view_image`                               | boolean                                                           | Enable or disable the `view_image` tool so Codex can attach local image files from the workspace (default: true).          |
-| `forced_login_method`                            | `chatgpt` \| `api`                                                | Only allow Codex to be used with ChatGPT or API keys.                                                                      |
+| `forced_login_method`                            | `chatgpt` \| `api`                                                | Default: `api`. Set to `chatgpt` to require the browser-based ChatGPT login.                                             |
 | `forced_chatgpt_workspace_id`                    | string (uuid)                                                     | Only allow Codex to be used with the specified ChatGPT workspace.                                                          |
 | `cli_auth_credentials_store`                     | `file` \| `keyring` \| `auto`                                     | Where to store CLI login credentials (default: `file`).                                                                    |

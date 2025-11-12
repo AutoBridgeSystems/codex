@@ -1,34 +1,34 @@
 # Authentication
 
-## Usage-based billing alternative: Use an OpenAI API key
+## Default: OpenAI API key
 
-If you prefer to pay-as-you-go, you can still authenticate with your OpenAI API key:
+Codex now prompts for an OpenAI API key the first time you run it. Paste the key when asked and it will be stored securely in `~/.codex/auth.json` (or `C:\Users\<you>\.codex\auth.json` on Windows). On subsequent runs the CLI reuses the saved key, so you only have to paste it once.
+
+To automate the login, pipe the key through stdin instead:
 
 ```shell
 printenv OPENAI_API_KEY | codex login --with-api-key
-```
-
-Alternatively, read from a file:
-
-```shell
+# or
 codex login --with-api-key < my_key.txt
 ```
 
-The legacy `--api-key` flag now exits with an error instructing you to use `--with-api-key` so that the key never appears in shell history or process listings.
-
 This key must, at minimum, have write access to the Responses API.
 
-## Migrating to ChatGPT login from API key
+## Switching to ChatGPT login
 
-If you've used the Codex CLI before with usage-based billing via an API key and want to switch to using your ChatGPT plan, follow these steps:
+Need to use your ChatGPT Plus/Pro/Team/Edu plan instead of an API key? Opt into the browser-based flow:
 
-1. Update the CLI and ensure `codex --version` is `0.20.0` or later
-2. Delete `~/.codex/auth.json` (on Windows: `C:\\Users\\USERNAME\\.codex\\auth.json`)
-3. Run `codex login` again
+1. Add `forced_login_method = "chatgpt"` to `~/.codex/config.toml` (or run Codex with `-c forced_login_method="chatgpt"`).
+2. Delete `~/.codex/auth.json` if it already contains an API key.
+3. Run `codex login` (or start the TUI) and select **Sign in with ChatGPT**. The CLI opens `http://localhost:1455/...` in your browser so you can complete the OAuth flow.
+
+Remove the config entry (or set it back to `"api"`) to return to the default API-key prompt.
 
 ## Connecting on a "Headless" Machine
 
-Today, the login process entails running a server on `localhost:1455`. If you are on a "headless" server, such as a Docker container or are `ssh`'d into a remote machine, loading `localhost:1455` in the browser on your local machine will not automatically connect to the webserver running on the _headless_ machine, so you must use one of the following workarounds:
+The steps below are only required for the ChatGPT login flow. For API keys you can simply run `codex login --with-api-key` inside the container/VM and paste the key.
+
+When using ChatGPT login on a remote or containerized environment, the local browser cannot reach `localhost:1455` on the remote host, so use one of the following workarounds:
 
 ### Authenticate locally and copy your credentials to the "headless" machine
 
@@ -65,4 +65,4 @@ If you run Codex on a remote machine (VPS/server) without a local browser, the l
 ssh -L 1455:localhost:1455 <user>@<remote-host>
 ```
 
-Then, in that SSH session, run `codex` and select "Sign in with ChatGPT". When prompted, open the printed URL (it will be `http://localhost:1455/...`) in your local browser. The traffic will be tunneled to the remote server.
+Then, in that SSH session, run `codex login` (or start the TUI) and select "Sign in with ChatGPT". When prompted, open the printed URL (it will be `http://localhost:1455/...`) in your local browser. The traffic will be tunneled to the remote server.

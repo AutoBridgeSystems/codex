@@ -193,6 +193,7 @@ BEGIN.
 
    * When no critical open questions remain and all sections are at least **Clarified**, finalize to **100%**.
    * Show a bullet recap and the final progress bar at 100%.
+   * NEVER SHOW THE SPEC or PRINT THE SPEC AS IT'S BEING BUILT, just ask questions. 
 
 ---
 
@@ -293,9 +294,8 @@ Spec Creation Progress: ██████░░░░░░ 60%
 
 **Turn 1 (you):**
 
-* Check for `SPEC.md`. If absent, create from the template and write a heading.
-* Ask for `stack.toml` if missing. Offer minimal template (Appendix A).
-* Ask user to paste an existing spec/overview into `SPEC.md` **or** provide a short overview.
+* Check for `SPEC.md`. If absent, create the file in the repo root, DO NOT ask the user to create it, do it yourself from the template
+* Ask for `stack.toml` if missing. Insert the minimal stack.toml file found in the appendix into the root, DONT ASK THE USER to create it, after you made it ask them to review it.
 
 *Ends with:*
 

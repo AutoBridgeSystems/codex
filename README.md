@@ -51,15 +51,17 @@ Each archive contains a single entry with the platform baked into the name (e.g.
 
 </details>
 
-### Using Codex with your ChatGPT plan
+### Authentication
 
 <p align="center">
   <img src="./.github/codex-cli-login.png" alt="Codex CLI login" width="80%" />
   </p>
 
-Run `codex` and select **Sign in with ChatGPT**. We recommend signing into your ChatGPT account to use Codex as part of your Plus, Pro, Team, Edu, or Enterprise plan. [Learn more about what's included in your ChatGPT plan](https://help.openai.com/en/articles/11369540-codex-in-chatgpt).
+Run `codex` and paste your OpenAI API key when prompted. The CLI encrypts the key in `~/.codex/auth.json`, so you only have to do this once (or run `printenv OPENAI_API_KEY | codex login --with-api-key` to script it). This usage-based flow works everywhere, including Docker.
 
-You can also use Codex with an API key, but this requires [additional setup](./docs/authentication.md#usage-based-billing-alternative-use-an-openai-api-key). If you previously used an API key for usage-based billing, see the [migration steps](./docs/authentication.md#migrating-from-usage-based-billing-api-key). If you're having trouble with login, please comment on [this issue](https://github.com/openai/codex/issues/1243).
+Prefer to sign in with your ChatGPT Plus/Pro/Team/Edu plan instead? Set `forced_login_method = "chatgpt"` in `~/.codex/config.toml` (or pass `-c forced_login_method="chatgpt"` on the command line) and run `codex login` to open the browser flow. [Learn more about what's included in your ChatGPT plan](https://help.openai.com/en/articles/11369540-codex-in-chatgpt).
+
+Additional details live in [docs/authentication.md](./docs/authentication.md). If you're having trouble with login, please comment on [this issue](https://github.com/openai/codex/issues/1243).
 
 ### Model Context Protocol (MCP)
 

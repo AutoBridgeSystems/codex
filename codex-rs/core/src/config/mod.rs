@@ -1011,7 +1011,9 @@ impl Config {
                 }
             });
 
-        let forced_login_method = cfg.forced_login_method;
+        let forced_login_method = cfg
+            .forced_login_method
+            .or(Some(ForcedLoginMethod::Api));
 
         let model = model
             .or(config_profile.model)
@@ -2891,7 +2893,7 @@ model_verbosity = "high"
                 developer_instructions: None,
                 compact_prompt: None,
                 forced_chatgpt_workspace_id: None,
-                forced_login_method: None,
+                forced_login_method: Some(ForcedLoginMethod::Api),
                 include_apply_patch_tool: false,
                 tools_web_search_request: false,
                 experimental_sandbox_command_assessment: false,
@@ -2962,7 +2964,7 @@ model_verbosity = "high"
             developer_instructions: None,
             compact_prompt: None,
             forced_chatgpt_workspace_id: None,
-            forced_login_method: None,
+            forced_login_method: Some(ForcedLoginMethod::Api),
             include_apply_patch_tool: false,
             tools_web_search_request: false,
             experimental_sandbox_command_assessment: false,
@@ -3048,7 +3050,7 @@ model_verbosity = "high"
             developer_instructions: None,
             compact_prompt: None,
             forced_chatgpt_workspace_id: None,
-            forced_login_method: None,
+            forced_login_method: Some(ForcedLoginMethod::Api),
             include_apply_patch_tool: false,
             tools_web_search_request: false,
             experimental_sandbox_command_assessment: false,
@@ -3120,7 +3122,7 @@ model_verbosity = "high"
             developer_instructions: None,
             compact_prompt: None,
             forced_chatgpt_workspace_id: None,
-            forced_login_method: None,
+            forced_login_method: Some(ForcedLoginMethod::Api),
             include_apply_patch_tool: false,
             tools_web_search_request: false,
             experimental_sandbox_command_assessment: false,

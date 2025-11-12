@@ -1134,7 +1134,7 @@ impl ChatWidget {
                 modifiers,
                 kind: KeyEventKind::Press,
                 ..
-            } if modifiers.contains(KeyModifiers::CONTROL) && c.eq_ignore_ascii_case(&'c') => {
+            } if modifiers == KeyModifiers::CONTROL && c.eq_ignore_ascii_case(&'c') => {
                 self.on_ctrl_c();
                 return;
             }
@@ -1143,11 +1143,11 @@ impl ChatWidget {
                 modifiers,
                 kind: KeyEventKind::Press,
                 ..
-            } if modifiers.contains(KeyModifiers::CONTROL) && c.eq_ignore_ascii_case(&'v') => {
+            } if modifiers == KeyModifiers::CONTROL && c.eq_ignore_ascii_case(&'v') => {
                 if let Ok((path, info)) = paste_image_to_temp_png() {
                     self.attach_image(path, info.width, info.height, info.encoded_format.label());
+                    return;
                 }
-                return;
             }
             other if other.kind == KeyEventKind::Press => {
                 self.bottom_pane.clear_ctrl_c_quit_hint();
