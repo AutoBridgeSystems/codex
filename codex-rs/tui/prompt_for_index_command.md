@@ -20,6 +20,7 @@ Tool notes
 - The tool already ignores common noise (e.g., `node_modules`, virtualenvs, caches).  
 - Extra excludes can be supplied via the `exclude` argument when needed (for example, to skip very large generated trees).  
 - The Markdown output uses an `ls -R` style code block; keep file paths relative to the repository root.
+- Don't create an INDEX or docs folder, place the (directory_name)_index.md files for each directory at the root of each respective directory. 
 
 Deliverable
 
