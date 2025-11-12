@@ -22,10 +22,10 @@ RUN cd adom-rs \
 ############################################################
 # Runtime stage: minimal image that only contains the binary
 ############################################################
-FROM debian:bookworm-slim
+FROM debian:bullseye-slim
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ca-certificates tini \
+    && apt-get install -y --no-install-recommends ca-certificates tini libssl1.1 \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
