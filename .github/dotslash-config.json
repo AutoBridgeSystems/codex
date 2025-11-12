@@ -1,58 +1,58 @@
 {
   "outputs": {
-    "adom": {
+    "codex": {
       "platforms": {
         "macos-aarch64": {
-          "regex": "^adom-aarch64-apple-darwin\\.zst$",
-          "path": "adom"
+          "regex": "^codex-aarch64-apple-darwin\\.zst$",
+          "path": "codex"
         },
         "macos-x86_64": {
-          "regex": "^adom-x86_64-apple-darwin\\.zst$",
-          "path": "adom"
+          "regex": "^codex-x86_64-apple-darwin\\.zst$",
+          "path": "codex"
         },
         "linux-x86_64": {
-          "regex": "^adom-x86_64-unknown-linux-musl\\.zst$",
-          "path": "adom"
+          "regex": "^codex-x86_64-unknown-linux-musl\\.zst$",
+          "path": "codex"
         },
         "linux-aarch64": {
-          "regex": "^adom-aarch64-unknown-linux-musl\\.zst$",
-          "path": "adom"
+          "regex": "^codex-aarch64-unknown-linux-musl\\.zst$",
+          "path": "codex"
         },
         "windows-x86_64": {
-          "regex": "^adom-x86_64-pc-windows-msvc\\.exe\\.zst$",
-          "path": "adom.exe"
+          "regex": "^codex-x86_64-pc-windows-msvc\\.exe\\.zst$",
+          "path": "codex.exe"
         },
         "windows-aarch64": {
-          "regex": "^adom-aarch64-pc-windows-msvc\\.exe\\.zst$",
-          "path": "adom.exe"
+          "regex": "^codex-aarch64-pc-windows-msvc\\.exe\\.zst$",
+          "path": "codex.exe"
         }
       }
     },
-    "adom-responses-api-proxy": {
+    "codex-responses-api-proxy": {
       "platforms": {
         "macos-aarch64": {
-          "regex": "^adom-responses-api-proxy-aarch64-apple-darwin\\.zst$",
-          "path": "adom-responses-api-proxy"
+          "regex": "^codex-responses-api-proxy-aarch64-apple-darwin\\.zst$",
+          "path": "codex-responses-api-proxy"
         },
         "macos-x86_64": {
-          "regex": "^adom-responses-api-proxy-x86_64-apple-darwin\\.zst$",
-          "path": "adom-responses-api-proxy"
+          "regex": "^codex-responses-api-proxy-x86_64-apple-darwin\\.zst$",
+          "path": "codex-responses-api-proxy"
         },
         "linux-x86_64": {
-          "regex": "^adom-responses-api-proxy-x86_64-unknown-linux-musl\\.zst$",
-          "path": "adom-responses-api-proxy"
+          "regex": "^codex-responses-api-proxy-x86_64-unknown-linux-musl\\.zst$",
+          "path": "codex-responses-api-proxy"
         },
         "linux-aarch64": {
-          "regex": "^adom-responses-api-proxy-aarch64-unknown-linux-musl\\.zst$",
-          "path": "adom-responses-api-proxy"
+          "regex": "^codex-responses-api-proxy-aarch64-unknown-linux-musl\\.zst$",
+          "path": "codex-responses-api-proxy"
         },
         "windows-x86_64": {
-          "regex": "^adom-responses-api-proxy-x86_64-pc-windows-msvc\\.exe\\.zst$",
-          "path": "adom-responses-api-proxy.exe"
+          "regex": "^codex-responses-api-proxy-x86_64-pc-windows-msvc\\.exe\\.zst$",
+          "path": "codex-responses-api-proxy.exe"
         },
         "windows-aarch64": {
-          "regex": "^adom-responses-api-proxy-aarch64-pc-windows-msvc\\.exe\\.zst$",
-          "path": "adom-responses-api-proxy.exe"
+          "regex": "^codex-responses-api-proxy-aarch64-pc-windows-msvc\\.exe\\.zst$",
+          "path": "codex-responses-api-proxy.exe"
         }
       }
     }

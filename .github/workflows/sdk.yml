@@ -26,9 +26,9 @@ jobs:
 
       - uses: dtolnay/rust-toolchain@1.90
 
-      - name: build adom
-        run: cargo build --bin adom
-        working-directory: adom-rs
+      - name: build codex
+        run: cargo build --bin codex
+        working-directory: codex-rs
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile

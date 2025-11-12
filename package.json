@@ -1,5 +1,5 @@
 {
-  "name": "adom-monorepo",
+  "name": "codex-monorepo",
   "private": true,
   "description": "Tools for repo-wide maintenance.",
   "scripts": {

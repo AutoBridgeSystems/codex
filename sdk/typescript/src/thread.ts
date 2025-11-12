@@ -1,6 +1,6 @@
-import { AdomOptions } from "./adomOptions";
+import { CodexOptions } from "./codexOptions";
 import { ThreadEvent, ThreadError, Usage } from "./events";
-import { AdomExec } from "./exec";
+import { CodexExec } from "./exec";
 import { ThreadItem } from "./items";
 import { ThreadOptions } from "./threadOptions";
 import { TurnOptions } from "./turnOptions";
@@ -39,8 +39,8 @@ export type Input = string | UserInput[];
 
 /** Respesent a thread of conversation with the agent. One thread can have multiple consecutive turns. */
 export class Thread {
-  private _exec: AdomExec;
-  private _options: AdomOptions;
+  private _exec: CodexExec;
+  private _options: CodexOptions;
   private _id: string | null;
   private _threadOptions: ThreadOptions;
 
@@ -51,8 +51,8 @@ export class Thread {
 
   /* @internal */
   constructor(
-    exec: AdomExec,
-    options: AdomOptions,
+    exec: CodexExec,
+    options: CodexOptions,
     threadOptions: ThreadOptions,
     id: string | null = null,
   ) {

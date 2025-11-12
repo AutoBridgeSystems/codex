@@ -1,12 +1,12 @@
 #!/usr/bin/env -S NODE_NO_WARNINGS=1 pnpm ts-node-esm --files
 
-import { Adom } from "@openai/adom-sdk";
+import { Codex } from "@openai/codex-sdk";
 
-import { adomPathOverride } from "./helpers.ts";
+import { codexPathOverride } from "./helpers.ts";
 
-const adom = new Adom({ adomPathOverride: adomPathOverride() });
+const codex = new Codex({ codexPathOverride: codexPathOverride() });
 
-const thread = adom.startThread();
+const thread = codex.startThread();
 
 const schema = {
   type: "object",

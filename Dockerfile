@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1.7
 
 ############################################################
-# Build stage: compile the Adom CLI binary with Cargo
+# Build stage: compile the Codex CLI binary with Cargo
 ############################################################
 FROM rust:1.84-bullseye AS builder
 
@@ -16,8 +16,8 @@ RUN apt-get update \
 COPY . .
 
 # Build the release binary
-RUN cd adom-rs \
-    && cargo build --release --bin adom
+RUN cd codex-rs \
+    && cargo build --release --bin codex
 
 ############################################################
 # Runtime stage: minimal image that only contains the binary
@@ -30,10 +30,10 @@ RUN apt-get update \
 
 WORKDIR /workspace
 
-COPY --from=builder /workspace/adom-rs/target/release/adom /usr/local/bin/adom
+COPY --from=builder /workspace/codex-rs/target/release/codex /usr/local/bin/codex
 
 # Non-root user for better safety
-RUN useradd -m -u 1000 adom
-USER adom
+RUN useradd -m -u 1000 codex
+USER codex
 
-ENTRYPOINT ["/usr/bin/tini", "--", "adom"]
+ENTRYPOINT ["/usr/bin/tini", "--", "codex"]

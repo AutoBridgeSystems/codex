@@ -1,15 +1,15 @@
 {
-  "name": "@openai/adom-sdk",
+  "name": "@openai/codex-sdk",
   "version": "0.0.0-dev",
-  "description": "TypeScript SDK for Adom APIs.",
+  "description": "TypeScript SDK for Codex APIs.",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/openai/adom.git",
+    "url": "git+https://github.com/openai/codex.git",
     "directory": "sdk/typescript"
   },
   "keywords": [
     "openai",
-    "adom",
+    "codex",
     "sdk",
     "typescript",
     "api"

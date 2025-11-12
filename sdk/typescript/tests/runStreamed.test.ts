@@ -2,7 +2,7 @@ import path from "node:path";
 
 import { describe, expect, it } from "@jest/globals";
 
-import { Adom } from "../src/adom";
+import { Codex } from "../src/codex";
 import { ThreadEvent } from "../src/index";
 
 import {
@@ -13,9 +13,9 @@ import {
   startResponsesTestProxy,
 } from "./responsesProxy";
 
-const adomExecPath = path.join(process.cwd(), "..", "..", "adom-rs", "target", "debug", "adom");
+const codexExecPath = path.join(process.cwd(), "..", "..", "codex-rs", "target", "debug", "codex");
 
-describe("Adom", () => {
+describe("Codex", () => {
   it("returns thread events", async () => {
     const { url, close } = await startResponsesTestProxy({
       statusCode: 200,
@@ -23,7 +23,7 @@ describe("Adom", () => {
     });
 
     try {
-      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       const result = await thread.runStreamed("Hello, world!");
@@ -82,7 +82,7 @@ describe("Adom", () => {
     });
 
     try {
-      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       const first = await thread.runStreamed("first input");
@@ -128,7 +128,7 @@ describe("Adom", () => {
     });
 
     try {
-      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
 
       const originalThread = client.startThread();
       const first = await originalThread.runStreamed("first input");
@@ -180,7 +180,7 @@ describe("Adom", () => {
     } as const;
 
     try {
-      const client = new Adom({ adomPathOverride: adomExecPath, baseUrl: url, apiKey: "test" });
+      const client = new Codex({ codexPathOverride: codexExecPath, baseUrl: url, apiKey: "test" });
 
       const thread = client.startThread();
       const streamed = await thread.runStreamed("structured", { outputSchema: schema });
@@ -192,7 +192,7 @@ describe("Adom", () => {
       const text = payload!.json.text;
       expect(text).toBeDefined();
       expect(text?.format).toEqual({
-        name: "adom_output_schema",
+        name: "codex_output_schema",
         type: "json_schema",
         strict: true,
         schema,

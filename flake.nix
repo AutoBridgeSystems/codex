@@ -1,5 +1,5 @@
 {
-  description = "Development Nix flake for OpenAI Adom CLI";
+  description = "Development Nix flake for OpenAI Codex CLI";
 
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
 
@@ -17,11 +17,11 @@
       packages = forAllSystems (system:
         let
           pkgs = nixpkgs.legacyPackages.${system};
-          adom-rs = pkgs.callPackage ./adom-rs { };
+          codex-rs = pkgs.callPackage ./codex-rs { };
         in
         {
-          adom-rs = adom-rs;
-          default = adom-rs;
+          codex-rs = codex-rs;
+          default = codex-rs;
         }
       );
     };
