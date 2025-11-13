@@ -5,14 +5,14 @@ Workplan
 1. Determine the absolute repository root (use the configured working directory or run `pwd`).  
 2. Run `index_codebase` with:
    - `root`: the repository root path  
-   - `output_path`: `docs/INDEX.md`  
-   - `max_depth`: `2` (capture top-level directories and their immediate children)  
+   - `output_path`: `ROOT_INDEX.md`  
+   - `max_depth`: `3` (capture top-level directories and their immediate children)  
 3. Inspect the generated listing to identify “major” directories worth deeper coverage (skip transient folders such as build artifacts, node modules, caches, or generated output).  
 4. For each major directory, call `index_codebase` again with:
    - `root`: the absolute path to that directory  
-   - `output_path`: `docs/index/<directory-name>.md` (create the `docs/index` folder if needed)  
-   - `max_depth`: `2` so we do not go more than two layers deep overall  
-5. If a major directory contains a noteworthy immediate subdirectory (second layer) that merits its own map, run the tool one additional time for that subdirectory, still stopping at depth 2.  
+   - `output_path`: `<directory-name>/<directory-name>_INDEX.md` 
+   - `max_depth`: `3` so we do not go more than two layers deep overall  
+5. If a major directory contains a noteworthy immediate subdirectory (second layer) that merits its own map, run the tool one additional time for that subdirectory, still stopping at depth 3.  
 6. Finish by summarizing which maps were written, highlighting any directories intentionally skipped, and confirming the files that now exist.
 
 Tool notes
