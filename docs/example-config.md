@@ -192,14 +192,14 @@ project_doc_fallback_filenames = []
 ################################################################################
 
 [tools]
-# Enable web search tool (alias: web_search_request). Default: false; set to true to enable
-web_search = false
+# Enable web search tool (alias: web_search_request). Default: true; set to false to disable
+web_search = true
 
 # Enable the view_image tool so the agent can attach local images. Default: true
 view_image = true
 
 # (Alias accepted) You can also write:
-# web_search_request = false
+# web_search_request = true
 
 ################################################################################
 # Centralized Feature Flags (preferred)
@@ -212,7 +212,7 @@ streamable_shell = false
 rmcp_client = false
 apply_patch_freeform = false
 view_image_tool = true
-web_search_request = false
+web_search_request = true
 experimental_sandbox_command_assessment = false
 ghost_commit = false
 enable_experimental_windows_sandbox = false
@@ -328,7 +328,7 @@ mcp_oauth_credentials_store = "auto"
 # experimental_use_rmcp_client = false
 # experimental_use_freeform_apply_patch = false
 # experimental_sandbox_command_assessment = false
-# tools_web_search = false
+# tools_web_search = true
 # tools_view_image = true
 # features = { unified_exec = false }
 

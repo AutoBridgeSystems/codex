@@ -13,3 +13,5 @@ Dockerfile
 codex-rs/target
 codex-cli/node_modules
 test1/backend/.venv
+test1/**
+!test1/.gitkeep

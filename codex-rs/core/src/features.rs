@@ -272,7 +272,7 @@ pub const FEATURES: &[FeatureSpec] = &[
         id: Feature::WebSearchRequest,
         key: "web_search_request",
         stage: Stage::Stable,
-        default_enabled: false,
+        default_enabled: true,
     },
     FeatureSpec {
         id: Feature::SandboxCommandAssessment,

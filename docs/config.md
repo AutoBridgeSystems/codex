@@ -34,7 +34,7 @@ Optional and experimental capabilities are toggled via the `[features]` table in
 ```toml
 [features]
 streamable_shell = true          # enable the streamable exec tool
-# web_search_request stays off unless you opt in
+# web_search_request defaults to true; set this to false to opt out
 # view_image_tool defaults to true; omit to keep defaults
 ```
 
@@ -47,7 +47,7 @@ Supported features:
 | `rmcp_client`                             |  false  | Experimental | Enable oauth support for streamable HTTP MCP servers |
 | `apply_patch_freeform`                    |  false  | Beta         | Include the freeform `apply_patch` tool              |
 | `view_image_tool`                         |  true   | Stable       | Include the `view_image` tool                        |
-| `web_search_request`                      |  false  | Stable       | Allow the model to issue web searches                |
+| `web_search_request`                      |  true   | Stable       | Allow the model to issue web searches                |
 | `experimental_sandbox_command_assessment` |  false  | Experimental | Enable model-based sandbox risk assessment           |
 | `ghost_commit`                            |  false  | Experimental | Create a ghost commit each turn                      |
 | `enable_experimental_windows_sandbox`     |  false  | Experimental | Use the Windows restricted-token sandbox             |
@@ -343,11 +343,11 @@ Though using this option may also be necessary if you try to use Codex in enviro
 
 ### tools.\*
 
-Use the optional `[tools]` table to toggle built-in tools that the agent may call. `web_search` stays off unless you opt in, while `view_image` starts enabled:
+Use the optional `[tools]` table to toggle built-in tools that the agent may call. `web_search` is now enabled by default (set it to false to opt out), while `view_image` starts enabled:
 
 ```toml
 [tools]
-web_search = true   # allow Codex to issue first-party web searches without prompting you
+web_search = false  # disable first-party web searches (enabled by default)
 view_image = false  # disable image uploads (they're enabled by default)
 ```
 
@@ -955,7 +955,7 @@ Valid values:
 | `experimental_instructions_file`                 | string (path)                                                     | Replace built‑in instructions (experimental).                                                                              |
 | `experimental_use_exec_command_tool`             | boolean                                                           | Use experimental exec command tool.                                                                                        |
 | `projects.<path>.trust_level`                    | string                                                            | Mark project/worktree as trusted (only `"trusted"` is recognized).                                                         |
-| `tools.web_search`                               | boolean                                                           | Enable web search tool (alias: `web_search_request`) (default: false).                                                     |
+| `tools.web_search`                               | boolean                                                           | Enable web search tool (alias: `web_search_request`) (default: true).                                                      |
 | `tools.view_image`                               | boolean                                                           | Enable or disable the `view_image` tool so Codex can attach local image files from the workspace (default: true).          |
 | `forced_login_method`                            | `chatgpt` \| `api`                                                | Default: `api`. Set to `chatgpt` to require the browser-based ChatGPT login.                                             |
 | `forced_chatgpt_workspace_id`                    | string (uuid)                                                     | Only allow Codex to be used with the specified ChatGPT workspace.                                                          |
