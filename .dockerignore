@@ -1,0 +1,15 @@
+.git
+.gitignore
+target
+node_modules
+**/node_modules
+**/__pycache__
+**/.venv
+**/venv
+**/env
+.vscode
+.idea
+Dockerfile
+codex-rs/target
+codex-cli/node_modules
+test1/backend/.venv
