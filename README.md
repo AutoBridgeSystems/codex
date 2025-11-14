@@ -1,111 +1,51 @@
-<p align="center"><code>npm i -g @openai/codex</code><br />or <code>brew install --cask codex</code></p>
+# AutoBridge ADOM (Custom Codex)
+This repo houses a custom version of Codex that has improved spec driven development flow and more.
 
-<p align="center"><strong>Codex CLI</strong> is a coding agent from OpenAI that runs locally on your computer.
-</br>
-</br>If you want Codex in your code editor (VS Code, Cursor, Windsurf), <a href="https://developers.openai.com/codex/ide">install in your IDE</a>
-</br>If you are looking for the <em>cloud-based agent</em> from OpenAI, <strong>Codex Web</strong>, go to <a href="https://chatgpt.com/codex">chatgpt.com/codex</a></p>
+## Features
+### /spec Command
+This command allows the user to create a spec using a conversational approach with ADOM. The process takes a while, but the results are worth it. It can be done with or without an initial spec.
 
-<p align="center">
-  <img src="./.github/codex-cli-splash.png" alt="Codex CLI splash" width="80%" />
-  </p>
+### /index Command
+This command comes with a custom Rust function that the AI can call to index a directory (and important sub-directories) in a repo using a token-friendly style. This is a great addon because if every major directory has an INDEX.md file, the AI can understand much quicker and with fewer tokens used what is going on.
 
----
+### Deep Research MCP
+This feature is coming soon, allows ADOM to call out to a deep research agent (in the cloud) to figure out an answer to a problem.
 
-## Quickstart
+## Defaults
+ADOM comes with some defaults enabled: 
+- Internet search enabled (just ask it to search)
+- Full Auto Mode enabled
+- Spec driven development principles inside the system prompt
+- High reasoning
 
-### Installing and running Codex CLI
 
-Install globally with your preferred package manager. If you use npm:
+## To run
 
-```shell
-npm install -g @openai/codex
-```
+1. Clone the repo.
+2. Build the Docker container (takes ~20 minutes):
 
-Alternatively, if you use Homebrew:
+   ```bash
+   docker build -t codex-cli .
+   ```
 
-```shell
-brew install --cask codex
-```
+3. Create a folder to work in (so ADOM doesn't see itself) and make it your working directory.
+4. Run the container with **one** of the following commands, depending on your shell:
 
-Then simply run `codex` to get started:
+   * **PowerShell**
 
-```shell
-codex
-```
+     ```powershell
+     docker run --rm -it -v ${PWD}:/workspace -w /workspace codex-cli
+     ```
 
-If you're running into upgrade issues with Homebrew, see the [FAQ entry on brew upgrade codex](./docs/faq.md#brew-upgrade-codex-isnt-upgrading-me).
+   * **Windows Command Prompt (cmd.exe)**
 
-<details>
-<summary>You can also go to the <a href="https://github.com/openai/codex/releases/latest">latest GitHub Release</a> and download the appropriate binary for your platform.</summary>
+     ```cmd
+     docker run --rm -it -v %cd%:/workspace -w /workspace codex-cli
+     ```
 
-Each GitHub Release contains many executables, but in practice, you likely want one of these:
+   * **Bash**
 
-- macOS
-  - Apple Silicon/arm64: `codex-aarch64-apple-darwin.tar.gz`
-  - x86_64 (older Mac hardware): `codex-x86_64-apple-darwin.tar.gz`
-- Linux
-  - x86_64: `codex-x86_64-unknown-linux-musl.tar.gz`
-  - arm64: `codex-aarch64-unknown-linux-musl.tar.gz`
-
-Each archive contains a single entry with the platform baked into the name (e.g., `codex-x86_64-unknown-linux-musl`), so you likely want to rename it to `codex` after extracting it.
-
-</details>
-
-### Authentication
-
-<p align="center">
-  <img src="./.github/codex-cli-login.png" alt="Codex CLI login" width="80%" />
-  </p>
-
-Run `codex` and paste your OpenAI API key when prompted. The CLI encrypts the key in `~/.codex/auth.json`, so you only have to do this once (or run `printenv OPENAI_API_KEY | codex login --with-api-key` to script it). This usage-based flow works everywhere, including Docker.
-
-Prefer to sign in with your ChatGPT Plus/Pro/Team/Edu plan instead? Set `forced_login_method = "chatgpt"` in `~/.codex/config.toml` (or pass `-c forced_login_method="chatgpt"` on the command line) and run `codex login` to open the browser flow. [Learn more about what's included in your ChatGPT plan](https://help.openai.com/en/articles/11369540-codex-in-chatgpt).
-
-Additional details live in [docs/authentication.md](./docs/authentication.md). If you're having trouble with login, please comment on [this issue](https://github.com/openai/codex/issues/1243).
-
-### Model Context Protocol (MCP)
-
-Codex can access MCP servers. To configure them, refer to the [config docs](./docs/config.md#mcp_servers).
-
-### Configuration
-
-Codex CLI supports a rich set of configuration options, with preferences stored in `~/.codex/config.toml`. For full configuration options, see [Configuration](./docs/config.md).
-
----
-
-### Docs & FAQ
-
-- [**Getting started**](./docs/getting-started.md)
-  - [CLI usage](./docs/getting-started.md#cli-usage)
-  - [Slash Commands](./docs/slash_commands.md)
-  - [Running with a prompt as input](./docs/getting-started.md#running-with-a-prompt-as-input)
-  - [Example prompts](./docs/getting-started.md#example-prompts)
-  - [Custom prompts](./docs/prompts.md)
-  - [Memory with AGENTS.md](./docs/getting-started.md#memory-with-agentsmd)
-- [**Configuration**](./docs/config.md)
-  - [Example config](./docs/example-config.md)
-- [**Sandbox & approvals**](./docs/sandbox.md)
-- [**Authentication**](./docs/authentication.md)
-  - [Auth methods](./docs/authentication.md#forcing-a-specific-auth-method-advanced)
-  - [Login on a "Headless" machine](./docs/authentication.md#connecting-on-a-headless-machine)
-- **Automating Codex**
-  - [GitHub Action](https://github.com/openai/codex-action)
-  - [TypeScript SDK](./sdk/typescript/README.md)
-  - [Non-interactive mode (`codex exec`)](./docs/exec.md)
-- [**Advanced**](./docs/advanced.md)
-  - [Tracing / verbose logging](./docs/advanced.md#tracing--verbose-logging)
-  - [Model Context Protocol (MCP)](./docs/advanced.md#model-context-protocol-mcp)
-- [**Zero data retention (ZDR)**](./docs/zdr.md)
-- [**Contributing**](./docs/contributing.md)
-- [**Install & build**](./docs/install.md)
-  - [System Requirements](./docs/install.md#system-requirements)
-  - [DotSlash](./docs/install.md#dotslash)
-  - [Build from source](./docs/install.md#build-from-source)
-- [**FAQ**](./docs/faq.md)
-- [**Open source fund**](./docs/open-source-fund.md)
-
----
-
-## License
-
-This repository is licensed under the [Apache-2.0 License](LICENSE).
+     ```bash
+     docker run --rm -it -v "$PWD":/workspace -w /workspace codex-cli
+     ```
+5. You will be prompted for an API key when the session starts. Drop in an Autobridge key, and you can get started immediately. You can also set `CODEX_API_KEY` in your environment and you'll be auto logged in.

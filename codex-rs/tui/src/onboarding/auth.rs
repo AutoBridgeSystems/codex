@@ -4,7 +4,7 @@ use codex_core::AuthManager;
 use codex_core::auth::AuthCredentialsStoreMode;
 use codex_core::auth::CLIENT_ID;
 use codex_core::auth::login_with_api_key;
-use codex_core::auth::read_openai_api_key_from_env;
+use codex_core::auth::read_codex_api_key_from_env;
 use codex_login::ServerOptions;
 use codex_login::ShutdownHandle;
 use codex_login::run_login_server;
@@ -158,6 +158,54 @@ pub(crate) struct AuthModeWidget {
 }
 
 impl AuthModeWidget {
+    pub(crate) fn new(
+        request_frame: FrameRequester,
+        codex_home: PathBuf,
+        cli_auth_credentials_store_mode: AuthCredentialsStoreMode,
+        login_status: LoginStatus,
+        auth_manager: Arc<AuthManager>,
+        forced_chatgpt_workspace_id: Option<String>,
+        forced_login_method: Option<ForcedLoginMethod>,
+    ) -> Self {
+        let api_login_allowed = !matches!(forced_login_method, Some(ForcedLoginMethod::Chatgpt));
+        let env_api_key = if api_login_allowed {
+            read_codex_api_key_from_env()
+        } else {
+            None
+        };
+        let initial_sign_in_state = if api_login_allowed {
+            SignInState::ApiKeyEntry(ApiKeyInputState {
+                value: env_api_key.clone().unwrap_or_default(),
+                prepopulated_from_env: env_api_key.is_some(),
+            })
+        } else {
+            SignInState::PickMode
+        };
+
+        let mut widget = Self {
+            request_frame,
+            highlighted_mode: if api_login_allowed {
+                AuthMode::ApiKey
+            } else {
+                AuthMode::ChatGPT
+            },
+            error: None,
+            sign_in_state: Arc::new(RwLock::new(initial_sign_in_state)),
+            codex_home,
+            cli_auth_credentials_store_mode,
+            login_status,
+            auth_manager,
+            forced_chatgpt_workspace_id,
+            forced_login_method,
+        };
+
+        if let Some(api_key) = env_api_key {
+            widget.save_api_key(api_key);
+        }
+
+        widget
+    }
+
     fn is_api_login_allowed(&self) -> bool {
         !matches!(self.forced_login_method, Some(ForcedLoginMethod::Chatgpt))
     }
@@ -177,11 +225,12 @@ impl AuthModeWidget {
         let mut lines: Vec<Line> = vec![
             Line::from(vec![
                 "  ".into(),
-                "Paste an OpenAI API key to start coding immediately.".into(),
+                "Set CODEX_API_KEY or paste an ADOM API key to start coding immediately."
+                    .into(),
             ]),
             Line::from(vec![
                 "  ".into(),
-                "Need your ChatGPT plan instead? Sign in with ChatGPT below.".into(),
+                "Prefer browser sign-in? Use the hosted ADOM login below.".into(),
             ]),
             "".into(),
         ];
@@ -220,14 +269,14 @@ impl AuthModeWidget {
             lines.extend(create_mode_item(
                 option_idx,
                 AuthMode::ApiKey,
-                "Provide your own API key",
+                "Provide your ADOM API key",
                 "Usage-based billing (default)",
             ));
             option_idx += 1;
             lines.push("".into());
         } else {
             lines.push(
-                "  API key login is disabled by this workspace. Sign in with ChatGPT to continue."
+                "  API key login is disabled by this workspace. Use the browser login to continue."
                     .dim()
                     .into(),
             );
@@ -238,13 +287,13 @@ impl AuthModeWidget {
             lines.extend(create_mode_item(
                 option_idx,
                 AuthMode::ChatGPT,
-                "Sign in with ChatGPT",
-                "Use your Plus, Pro, Team, Edu, or Enterprise plan",
+                "Sign in with ADOM Cloud",
+                "Use your hosted Autobridge account",
             ));
             lines.push("".into());
         } else {
             lines.push(
-                "  ChatGPT login is disabled by this workspace. Use an API key to continue."
+                "  Browser login is disabled by this workspace. Use an API key to continue."
                     .dim()
                     .into(),
             );
@@ -291,26 +340,15 @@ impl AuthModeWidget {
 
     fn render_chatgpt_success_message(&self, area: Rect, buf: &mut Buffer) {
         let lines = vec![
-            "✓ Signed in with your ChatGPT account".fg(Color::Green).into(),
+            "✓ Connected to your ADOM account".fg(Color::Green).into(),
             "".into(),
             "  Before you start:".into(),
             "".into(),
-            "  Decide how much autonomy you want to grant Codex".into(),
-            Line::from(vec![
-                "  For more details see the ".into(),
-                "\u{1b}]8;;https://github.com/openai/codex\u{7}Codex docs\u{1b}]8;;\u{7}".underlined(),
-            ])
-            .dim(),
+            "  Decide how much autonomy you want ADOM to handle".into(),
+            "  Review every change and command before applying it".dim().into(),
             "".into(),
-            "  Codex can make mistakes".into(),
-            "  Review the code it writes and commands it runs".dim().into(),
-            "".into(),
-            "  Powered by your ChatGPT account".into(),
-            Line::from(vec![
-                "  Uses your plan's rate limits and ".into(),
-                "\u{1b}]8;;https://chatgpt.com/#settings\u{7}training data preferences\u{1b}]8;;\u{7}".underlined(),
-            ])
-            .dim(),
+            "  Powered by your ADOM account".into(),
+            "  Usage is billed via your Autobridge subscription.".dim().into(),
             "".into(),
             "  Press Enter to continue".fg(Color::Cyan).into(),
         ];
@@ -322,7 +360,7 @@ impl AuthModeWidget {
 
     fn render_chatgpt_success(&self, area: Rect, buf: &mut Buffer) {
         let lines = vec![
-            "✓ Signed in with your ChatGPT account"
+            "✓ Connected to your ADOM account"
                 .fg(Color::Green)
                 .into(),
         ];
@@ -336,7 +374,7 @@ impl AuthModeWidget {
         let lines = vec![
             "✓ API key configured".fg(Color::Green).into(),
             "".into(),
-            "  Codex will use usage-based billing with your API key.".into(),
+            "  ADOM will use usage-based billing with your API key.".into(),
         ];
 
         Paragraph::new(lines)
@@ -355,14 +393,17 @@ impl AuthModeWidget {
         let mut intro_lines: Vec<Line> = vec![
             Line::from(vec![
                 "> ".into(),
-                "Use your own OpenAI API key for usage-based billing".bold(),
+                "Use your ADOM API key for usage-based billing".bold(),
             ]),
             "".into(),
             "  Paste or type your API key below. It will be stored locally in auth.json.".into(),
+            "  Set CODEX_API_KEY in your shell to skip this step next time."
+                .dim()
+                .into(),
             "".into(),
         ];
         if state.prepopulated_from_env {
-            intro_lines.push("  Detected OPENAI_API_KEY environment variable.".into());
+            intro_lines.push("  Detected CODEX_API_KEY environment variable.".into());
             intro_lines.push(
                 "  Paste a different key if you prefer to use another account."
                     .dim()
@@ -495,7 +536,7 @@ impl AuthModeWidget {
             return;
         }
         self.error = None;
-        let prefill_from_env = read_openai_api_key_from_env();
+        let prefill_from_env = read_codex_api_key_from_env();
         let mut guard = self.sign_in_state.write().unwrap();
         match &mut *guard {
             SignInState::ApiKeyEntry(state) => {
@@ -662,22 +703,19 @@ mod tests {
     fn widget_forced_chatgpt() -> (AuthModeWidget, TempDir) {
         let codex_home = TempDir::new().unwrap();
         let codex_home_path = codex_home.path().to_path_buf();
-        let widget = AuthModeWidget {
-            request_frame: FrameRequester::test_dummy(),
-            highlighted_mode: AuthMode::ChatGPT,
-            error: None,
-            sign_in_state: Arc::new(RwLock::new(SignInState::PickMode)),
-            codex_home: codex_home_path.clone(),
-            cli_auth_credentials_store_mode: AuthCredentialsStoreMode::File,
-            login_status: LoginStatus::NotAuthenticated,
-            auth_manager: AuthManager::shared(
+        let widget = AuthModeWidget::new(
+            FrameRequester::test_dummy(),
+            codex_home_path.clone(),
+            AuthCredentialsStoreMode::File,
+            LoginStatus::NotAuthenticated,
+            AuthManager::shared(
                 codex_home_path,
                 false,
                 AuthCredentialsStoreMode::File,
             ),
-            forced_chatgpt_workspace_id: None,
-            forced_login_method: Some(ForcedLoginMethod::Chatgpt),
-        };
+            None,
+            Some(ForcedLoginMethod::Chatgpt),
+        );
         (widget, codex_home)
     }
 

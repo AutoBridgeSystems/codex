@@ -954,14 +954,7 @@ impl Config {
         let approval_policy = approval_policy_override
             .or(config_profile.approval_policy)
             .or(cfg.approval_policy)
-            .unwrap_or_else(|| {
-                if active_project.is_trusted() {
-                    // If no explicit approval policy is set, but we trust cwd, default to OnRequest
-                    AskForApproval::OnRequest
-                } else {
-                    AskForApproval::default()
-                }
-            });
+            .unwrap_or(AskForApproval::Never);
         let did_user_set_custom_approval_policy_or_sandbox_mode = approval_policy_override
             .is_some()
             || config_profile.approval_policy.is_some()
@@ -1139,7 +1132,8 @@ impl Config {
                 .unwrap_or(false),
             model_reasoning_effort: config_profile
                 .model_reasoning_effort
-                .or(cfg.model_reasoning_effort),
+                .or(cfg.model_reasoning_effort)
+                .or(Some(ReasoningEffort::High)),
             model_reasoning_summary: config_profile
                 .model_reasoning_summary
                 .or(cfg.model_reasoning_summary)
@@ -2956,7 +2950,7 @@ model_verbosity = "high"
             codex_linux_sandbox_exe: None,
             hide_agent_reasoning: false,
             show_raw_agent_reasoning: false,
-            model_reasoning_effort: None,
+            model_reasoning_effort: Some(ReasoningEffort::High),
             model_reasoning_summary: ReasoningSummary::default(),
             model_verbosity: None,
             chatgpt_base_url: "https://chatgpt.com/backend-api/".to_string(),
@@ -3042,7 +3036,7 @@ model_verbosity = "high"
             codex_linux_sandbox_exe: None,
             hide_agent_reasoning: false,
             show_raw_agent_reasoning: false,
-            model_reasoning_effort: None,
+            model_reasoning_effort: Some(ReasoningEffort::High),
             model_reasoning_summary: ReasoningSummary::default(),
             model_verbosity: None,
             chatgpt_base_url: "https://chatgpt.com/backend-api/".to_string(),

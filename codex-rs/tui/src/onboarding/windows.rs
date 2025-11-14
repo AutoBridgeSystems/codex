@@ -32,11 +32,11 @@ pub(crate) const WSL_INSTRUCTIONS: &str = r#"Install WSL2 by opening PowerShell 
     curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/master/install.sh | bash && export NVM_DIR="$HOME/.nvm" && \. "$NVM_DIR/nvm.sh"
     nvm install 22
 
-    # Install and run Codex in WSL
+    # Install and run ADOM (via Codex CLI) in WSL
     npm install --global @openai/codex
     codex
 
-    # Additional details and instructions for how to install and run Codex in WSL:
+    # Additional details and instructions for how to install and run ADOM in WSL:
     https://developers.openai.com/codex/windows"#;
 
 pub(crate) struct WindowsSetupWidget {
@@ -99,9 +99,9 @@ impl WidgetRef for &WindowsSetupWidget {
         let mut lines: Vec<Line> = vec![
             Line::from(vec![
                 "> ".into(),
-                "To use all Codex features, we recommend running Codex in Windows Subsystem for Linux (WSL2)".bold(),
+                "To unlock every ADOM feature, run the CLI inside Windows Subsystem for Linux (WSL2)".bold(),
             ]),
-            Line::from(vec!["  ".into(), "WSL allows Codex to run Agent mode in a sandboxed environment with better data protections in place.".into()]),
+            Line::from(vec!["  ".into(), "WSL allows ADOM to run Agent mode in a sandboxed environment with better data protections in place.".into()]),
             Line::from(vec!["  ".into(), "Learn more: https://developers.openai.com/codex/windows".into()]),
             Line::from(""),
         ];
