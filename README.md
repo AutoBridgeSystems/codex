@@ -49,3 +49,4 @@ ADOM comes with some defaults enabled:
      docker run --rm -it -v "$PWD":/workspace -w /workspace codex-cli
      ```
 5. You will be prompted for an API key when the session starts. Drop in an Autobridge key, and you can get started immediately. You can also set `CODEX_API_KEY` in your environment and you'll be auto logged in.
+
